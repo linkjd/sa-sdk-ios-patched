@@ -1,0 +1,108 @@
+//
+// SAPropertyInterceptor.m
+// SensorsAnalyticsSDK
+//
+// Created by 张敏超🍎 on 2022/4/13.
+// Copyright © 2015-2022 Sensors Data Co., Ltd. All rights reserved.
+//
+
+#if ! __has_feature(objc_arc)
+#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
+#endif
+
+#import "SAPropertyInterceptor.h"
+#import "SAPropertyPluginManager.h"
+#import "SAModuleManager.h"
+#import "SAConstants+Private.h"
+#import "SACustomPropertyPlugin.h"
+#import "SASuperPropertyPlugin.h"
+#import "SADeviceIDPropertyPlugin.h"
+#import "SALog.h"
+
+@implementation SAPropertyInterceptor
+
+- (void)processWithInput:(SAFlowData *)input completion:(SAFlowDataCompletion)completion {
+    NSParameterAssert(input.eventObject);
+
+    // 线上极端情况下，切换到异步 serialQueue 后，eventObject 可能被释放
+    if(!input.eventObject || ![input.eventObject isKindOfClass:SABaseEventObject.class]) {
+        input.state = SAFlowStateError;
+        input.message = @"A memory problem has occurred, eventObject may be freed. End the track flow";
+        completion(input);
+    }
+
+    // 注册自定义属性采集插件，采集 track 附带属性
+    SACustomPropertyPlugin *customPlugin = [[SACustomPropertyPlugin alloc] initWithCustomProperties:input.properties];
+    [[SAPropertyPluginManager sharedInstance] registerCustomPropertyPlugin:customPlugin];
+
+    SABaseEventObject *object = input.eventObject;
+
+    // 获取插件采集的所有属性
+    NSDictionary *pluginProperties = [[SAPropertyPluginManager sharedInstance] propertiesWithFilter:object];
+    // 属性合法性校验
+    NSMutableDictionary *properties = [SAPropertyValidator validProperties:pluginProperties];
+
+    // 事件、公共属性和动态公共属性都需要支持修改 $project, $token, $time
+    object.project = (NSString *)properties[kSAEventCommonOptionalPropertyProject];
+    object.token = (NSString *)properties[kSAEventCommonOptionalPropertyToken];
+    id originalTime = properties[kSAEventCommonOptionalPropertyTime];
+
+    // 如果公共属性设置 $time, H5 事件也需要修改
+    if ([originalTime isKindOfClass:NSDate.class]) {
+        NSDate *customTime = (NSDate *)originalTime;
+        int64_t customTimeInt = [customTime timeIntervalSince1970] * 1000;
+        if (customTimeInt >= kSAEventCommonOptionalPropertyTimeInt) {
+            object.time = customTimeInt;
+        } else {
+            SALogError(@"$time error %lld, Please check the value", customTimeInt);
+        }
+    } else if (originalTime) {
+        SALogError(@"$time '%@' invalid, Please check the value", originalTime);
+    }
+
+    // $project, $token, $time 处理完毕后需要移除
+    NSArray<NSString *> *needRemoveKeys = @[kSAEventCommonOptionalPropertyProject,
+                                            kSAEventCommonOptionalPropertyToken,
+                                            kSAEventCommonOptionalPropertyTime];
+    [properties removeObjectsForKeys:needRemoveKeys];
+
+    // 公共属性, 动态公共属性, 自定义属性不允许修改 $anonymization_id、$device_id 属性, 因此需要将修正逻操作放在所有属性添加后
+    if (input.configOptions.disableDeviceId) {
+        // 不允许客户设置 $device_id
+        [properties removeObjectForKey:kSADeviceIDPropertyPluginDeviceID];
+    } else {
+        // 不允许客户设置 $anonymization_id
+        [properties removeObjectForKey:kSADeviceIDPropertyPluginAnonymizationID];
+    }
+
+    // 避免 object.properties 调用 addEntriesFromDictionary 时同时获取 object.properties
+    NSMutableDictionary *objectProperties = [NSMutableDictionary dictionaryWithDictionary:object.properties];
+    [objectProperties addEntriesFromDictionary:[properties copy]];
+    object.properties = objectProperties;
+
+    // 从公共属性中更新 lib 节点中的 $app_version 值
+    NSDictionary *superProperties = [SAPropertyPluginManager.sharedInstance currentPropertiesForPluginClasses:@[SASuperPropertyPlugin.class]];
+    id appVersion = superProperties[kSAEventPresetPropertyAppVersion];
+    if (appVersion) {
+        object.lib.appVersion = appVersion;
+    }
+
+    // 仅在全埋点的元素点击和页面浏览事件中添加 $lib_detail
+    BOOL isAppClick = [object.event isEqualToString:kSAEventNameAppClick];
+    BOOL isViewScreen = [object.event isEqualToString:kSAEventNameAppViewScreen];
+    NSDictionary *customProperties = [customPlugin properties];
+    if (isAppClick || isViewScreen) {
+        object.lib.detail = [NSString stringWithFormat:@"%@######", customProperties[kSAEventPropertyScreenName] ?: @""];
+    }
+
+    // 针对 Flutter 和 RN 触发的全埋点事件，需要修正 $lib_method
+    NSString *libMethod = input.properties[kSAEventPresetPropertyLibMethod];
+    if ([libMethod isKindOfClass:NSString.class] && [libMethod isEqualToString:kSALibMethodAuto] ) {
+        object.lib.method = kSALibMethodAuto;
+    }
+
+    input.properties = nil;
+    completion(input);
+}
+
+@end
