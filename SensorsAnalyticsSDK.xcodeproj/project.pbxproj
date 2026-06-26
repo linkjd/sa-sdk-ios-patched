@@ -433,6 +433,8 @@
 		CB6EBAF322855222003CFBA8 /* cert.outdate.cer in Resources */ = {isa = PBXBuildFile; fileRef = CB6EBAEF22855222003CFBA8 /* cert.outdate.cer */; };
 		CB6EBAF422855222003CFBA8 /* ca.cer1 in Resources */ = {isa = PBXBuildFile; fileRef = CB6EBAF022855222003CFBA8 /* ca.cer1 */; };
 		CB6EBAF522855222003CFBA8 /* ca.der.cer in Resources */ = {isa = PBXBuildFile; fileRef = CB6EBAF122855222003CFBA8 /* ca.der.cer */; };
+		E2FABF5C2FEE669D00AB39CA /* SACustomDataProcessInterceptor.h in Headers */ = {isa = PBXBuildFile; fileRef = E2FABF5A2FEE669D00AB39CA /* SACustomDataProcessInterceptor.h */; };
+		E2FABF5D2FEE669D00AB39CA /* SACustomDataProcessInterceptor.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FABF5B2FEE669D00AB39CA /* SACustomDataProcessInterceptor.m */; };
 		F200095628BE0363003C5113 /* SAUIInternalProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = F200095528BE0363003C5113 /* SAUIInternalProperties.h */; };
 		F200095928BE067A003C5113 /* UIView+SAElementID.h in Headers */ = {isa = PBXBuildFile; fileRef = F200095728BE067A003C5113 /* UIView+SAElementID.h */; };
 		F200095A28BE067A003C5113 /* UIView+SAElementID.m in Sources */ = {isa = PBXBuildFile; fileRef = F200095828BE067A003C5113 /* UIView+SAElementID.m */; };
@@ -1022,6 +1024,8 @@
 		CB6EBAEF22855222003CFBA8 /* cert.outdate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = cert.outdate.cer; sourceTree = "<group>"; };
 		CB6EBAF022855222003CFBA8 /* ca.cer1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ca.cer1; sourceTree = "<group>"; };
 		CB6EBAF122855222003CFBA8 /* ca.der.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = ca.der.cer; sourceTree = "<group>"; };
+		E2FABF5A2FEE669D00AB39CA /* SACustomDataProcessInterceptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SACustomDataProcessInterceptor.h; sourceTree = "<group>"; };
+		E2FABF5B2FEE669D00AB39CA /* SACustomDataProcessInterceptor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SACustomDataProcessInterceptor.m; sourceTree = "<group>"; };
 		F200095528BE0363003C5113 /* SAUIInternalProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SAUIInternalProperties.h; sourceTree = "<group>"; };
 		F200095728BE067A003C5113 /* UIView+SAElementID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+SAElementID.h"; sourceTree = "<group>"; };
 		F200095828BE067A003C5113 /* UIView+SAElementID.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+SAElementID.m"; sourceTree = "<group>"; };
@@ -1290,6 +1294,8 @@
 		4D141A4A2857133500E27169 /* Flush */ = {
 			isa = PBXGroup;
 			children = (
+				E2FABF5A2FEE669D00AB39CA /* SACustomDataProcessInterceptor.h */,
+				E2FABF5B2FEE669D00AB39CA /* SACustomDataProcessInterceptor.m */,
 				880980752800386600EB2B3D /* SACanFlushInterceptor.h */,
 				880980762800386600EB2B3D /* SACanFlushInterceptor.m */,
 				4DDF8BA22B9708810007D70D /* SAFlushJSONInterceptor.h */,
@@ -2482,6 +2488,7 @@
 				A8356DC52656459A00FD64AA /* SAAppTracker.h in Headers */,
 				F2A3F7632AE64FA80089809C /* SAAppInteractTracker.h in Headers */,
 				88847F4A27605D3F007321E4 /* SABaseStoreManager.h in Headers */,
+				E2FABF5C2FEE669D00AB39CA /* SACustomDataProcessInterceptor.h in Headers */,
 				883BAAB02669CD18008105D2 /* SAExceptionManager.h in Headers */,
 				45BD80CE26F0B49700DCC759 /* SAThreadSafeDictionary.h in Headers */,
 				F22E1B1B26A55C8A0033A748 /* SAAppPageLeaveTracker.h in Headers */,
@@ -2795,6 +2802,7 @@
 				F2FBBBB728A3A77000F75293 /* SAExposureViewObject.m in Sources */,
 				4D9B536826382F0100318B1D /* SADeviceOrientationManager.m in Sources */,
 				4DD1285425F872A4008C0B1E /* SAEnumDescription.m in Sources */,
+				E2FABF5D2FEE669D00AB39CA /* SACustomDataProcessInterceptor.m in Sources */,
 				FCBECDF827DEDF6400361D6C /* SADeepLinkEventProcessor.m in Sources */,
 				4DC4815728B775B60068D5F4 /* SAFlutterPluginBridge.m in Sources */,
 				F206CBE529E0085800C46054 /* SAFlushJSONInterceptor+Encrypt.m in Sources */,
