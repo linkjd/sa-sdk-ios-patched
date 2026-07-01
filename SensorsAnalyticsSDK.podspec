@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Base' do |base|
     core_dir = "SensorsAnalyticsSDK/Core/"
-    base.source_files = core_dir + "**/*.{h,m}"
+    base.source_files = core_dir + "**/*.{h,m,c}"
     base.exclude_files = core_dir + 'SAAlertController.{h,m}', core_dir + 'HookDelegate/**/*.{h,m}'
     base.public_header_files = core_dir + "SensorsAnalyticsSDK.h", core_dir + "SensorsAnalyticsExtension.h", core_dir + "SensorsAnalyticsSDK+Public.h", core_dir + "SASecurityPolicy.h", core_dir + "SAConfigOptions.h", core_dir + "SAConstants.h", core_dir + "PropertyPlugin/SAPropertyPlugin.h"
     base.ios.frameworks = 'CoreTelephony', "SystemConfiguration"
