@@ -31,6 +31,8 @@ static NSInteger const kSAFlushMaxRepeatCount = 40;
     inputData.cookie = input.cookie;
     inputData.repeatCount = input.repeatCount + 1;
     inputData.isInstantEvent = input.isInstantEvent;
+    inputData.customHeaders = input.customHeaders; // [自定义修改] 传递自定义请求头（包含 X-Sign）
+    inputData.secretKey = input.secretKey; // [自定义修改] 传递 SM3 签名密钥
     // 当前已处于 serialQueue，不必再切队列
     [SAFlowManager.sharedInstance startWithFlowID:kSAFlushFlowId input:inputData completion:^(SAFlowData * _Nonnull output) {
         completion(output);

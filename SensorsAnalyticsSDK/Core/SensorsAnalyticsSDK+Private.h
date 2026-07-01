@@ -75,6 +75,10 @@
 // [自定义修改] 自定义请求头字典，用于在数据上报时添加自定义 HTTP Header
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, NSString *> *customHeaders;
 
+// [自定义修改] SM3 国密签名密钥，用于数据上报时对请求参数进行签名加密
+// 当该值为 nil 或空字符串时，跳过签名流程
+@property (nonatomic, copy, nullable) NSString *secretKey;
+
 @end
 
 #endif /* SensorsAnalyticsSDK_priv_h */

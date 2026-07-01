@@ -1053,6 +1053,23 @@ NSString * const SensorsAnalyticsIdentityKeyEmail = @"$identity_email";
     return headers;
 }
 
+// [自定义修改] SM3 签名密钥 setter/getter 实现
+#pragma mark - Secret Key
+
+- (void)setSecretKey:(nullable NSString *)secretKey {
+    dispatch_async(self.serialQueue, ^{
+        self.configOptions.secretKey = [secretKey copy];
+    });
+}
+
+- (nullable NSString *)secretKey {
+    __block NSString *key = nil;
+    dispatch_sync(self.serialQueue, ^{
+        key = self.configOptions.secretKey;
+    });
+    return key;
+}
+
 #pragma mark - setup Flow
 
 - (void)trackEventObject:(SABaseEventObject *)object properties:(NSDictionary *)properties {
@@ -1079,14 +1096,17 @@ NSString * const SensorsAnalyticsIdentityKeyEmail = @"$identity_email";
 - (void)flushAllEventRecordsWithCompletion:(void(^)(void))completion {
     NSString *cookie = [self getCookieWithDecode:NO];
     NSDictionary *headers = self.customHeaders; // [自定义修改] 读取自定义请求头并传递到 flush 流程
+    NSString *secretKey = self.secretKey; // [自定义修改] 读取 SM3 签名密钥并传递到 flush 流程
     SAFlowData *instantEventFlushInput = [[SAFlowData alloc] init];
     instantEventFlushInput.cookie = cookie;
     instantEventFlushInput.isInstantEvent = YES;
     instantEventFlushInput.customHeaders = headers; // [自定义修改] 读取自定义请求头并传递到 flush 流程
+    instantEventFlushInput.secretKey = secretKey; // [自定义修改] 传递 SM3 签名密钥到 flush 流程
     [SAFlowManager.sharedInstance startWithFlowID:kSAFlushFlowId input:instantEventFlushInput completion:^(SAFlowData * _Nonnull output) {
         SAFlowData *normalFlushInput = [[SAFlowData alloc] init];
         normalFlushInput.cookie = cookie;
         normalFlushInput.customHeaders = headers; // [自定义修改] 读取自定义请求头并传递到 flush 流程
+        normalFlushInput.secretKey = secretKey; // [自定义修改] 传递 SM3 签名密钥到 flush 流程
         [SAFlowManager.sharedInstance startWithFlowID:kSAFlushFlowId input:normalFlushInput completion:^(SAFlowData * _Nonnull output) {
             if (completion) {
                 completion();

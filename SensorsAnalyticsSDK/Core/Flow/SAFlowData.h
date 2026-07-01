@@ -84,6 +84,11 @@ typedef void(^SAFlowDataCompletion)(SAFlowData *output);
 /// 当不需要自定义请求头时，传 nil 或空字典即可
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, NSString *> *customHeaders;
 
+/// [自定义修改] SM3 国密签名密钥
+/// 用于数据上报时对请求参数进行签名加密
+/// 当该值为 nil 或空字符串时，跳过签名流程
+@property (nonatomic, copy, nullable) NSString *secretKey;
+
 @property (nonatomic, assign) SAFlushGzipCode gzipCode;
 
 @end

@@ -32,6 +32,8 @@ static NSString * const kSAFlowDataRepeatCount = @"repeat_count";
 static NSString * const kSAFlowDataGzipCode = @"gzip_code";
 // [自定义修改] 自定义请求头存储 key
 static NSString * const kSAFlowDataCustomHeaders = @"custom_headers";
+// [自定义修改] SM3 签名密钥存储 key
+static NSString * const kSAFlowDataSecretKey = @"secret_key";
 
 @implementation SAFlowData
 
@@ -187,6 +189,15 @@ static NSString * const kSAFlowDataCustomHeaders = @"custom_headers";
 
 - (NSDictionary<NSString *, NSString *> *)customHeaders {
     return self.param[kSAFlowDataCustomHeaders];
+}
+
+// [自定义修改] SM3 签名密钥 getter/setter
+- (void)setSecretKey:(NSString *)secretKey {
+    [self setParamWithKey:kSAFlowDataSecretKey value:secretKey];
+}
+
+- (NSString *)secretKey {
+    return self.param[kSAFlowDataSecretKey];
 }
 
 @end

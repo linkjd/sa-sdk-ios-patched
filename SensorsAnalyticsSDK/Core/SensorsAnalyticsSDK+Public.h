@@ -640,6 +640,42 @@ extern NSString * const SensorsAnalyticsIdentityKeyEmail;
  */
 - (nullable NSDictionary<NSString *, NSString *> *)customHeaders;
 
+/**
+ * @abstract
+ * 设置 SM3 国密签名密钥
+ *
+ * @discussion
+ * 设置密钥后，SDK 在每次数据上报时会对请求参数进行 SM3 签名加密，
+ * 并将签名结果添加到 HTTP 请求头的 "X-Sign" 字段中。
+ *
+ * 当传入 nil 或空字符串时，SDK 将跳过签名流程，直接进行数据传输。
+ *
+ * 使用示例：
+ * @code
+ * // 启用签名（需要加签的场景）
+ * [[SensorsAnalyticsSDK sharedInstance] setSecretKey:@"your-secret-key"];
+ *
+ * // 禁用签名（不需要加签的场景）
+ * [[SensorsAnalyticsSDK sharedInstance] setSecretKey:nil];
+ * @endcode
+ *
+ * 注意事项：
+ * 1. 密钥将在下一次数据刷新（flush）时生效
+ * 2. 请妥善保管密钥，避免硬编码在代码中
+ * 3. 密钥应通过安全渠道获取，如服务端下发或安全存储
+ *
+ * @param secretKey SM3 签名密钥，传 nil 或空字符串可禁用签名
+ */
+- (void)setSecretKey:(nullable NSString *)secretKey;
+
+/**
+ * @abstract
+ * 获取当前设置的 SM3 签名密钥
+ *
+ * @return 签名密钥，未设置时返回 nil
+ */
+- (nullable NSString *)secretKey;
+
 @end
 
 #pragma mark - Deprecated
