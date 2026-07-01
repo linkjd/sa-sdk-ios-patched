@@ -53,15 +53,12 @@
     }
     
     @try {
-        // [自定义修改] 构建待签名数据：JSON 数据 + 密钥
-        NSMutableString *dataToSign = [NSMutableString stringWithString:jsonString];
-        [dataToSign appendString:secretKey];
-        
-        // [自定义修改] 使用 SM3Utils 计算 SM3 哈希（十六进制字符串）
-        NSString *signString = [SM3Utils sm3HexWithString:dataToSign];
+        // [自定义修改] 使用 HMAC-SM3 算法对请求参数进行签名加密
+        // secretKey 作为 HMAC 密钥，jsonString 作为待签名数据
+        NSString *signString = [SM3Utils hmacSM3HexWithKey:secretKey data:jsonString];
         
         if (signString.length == 0) {
-            SALogError(@"[自定义修改] SM3 hash result is empty");
+            SALogError(@"[自定义修改] HMAC-SM3 hash result is empty");
             return nil;
         }
         
