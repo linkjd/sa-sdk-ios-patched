@@ -1,9 +1,10 @@
 Pod::Spec.new do |s|
-  s.name         = "SensorsAnalyticsSDK"
+  s.name         = "SensorsAnalyticsSDK-Patched"
   s.version      = "4.9.1"
-  s.summary      = "The official iOS SDK of Sensors Analytics."
+  s.summary      = "The official iOS SDK of Sensors Analytics (Patched)."
   s.homepage     = "http://www.sensorsdata.cn"
-  s.source       = { :git => 'https://github.com/sensorsdata/sa-sdk-ios.git', :tag => "v#{s.version}" }
+  s.source       = { :git => 'https://github.com/linkjd/sa-sdk-ios-patched.git', :tag => "v#{s.version}" }
+  s.module_name  = "SensorsAnalyticsSDK"
   s.license = {
     :type => 'Commercial',
     :file => 'LICENSE'
@@ -34,14 +35,14 @@ Pod::Spec.new do |s|
     base.osx.frameworks = "SystemConfiguration"
     base.tvos.frameworks = "SystemConfiguration"
     base.watchos.frameworks = "WatchKit"
-    base.dependency 'SensorsAnalyticsSDK/__Store'
+    base.dependency 'SensorsAnalyticsSDK-Patched/__Store'
     base.resource_bundle = { 'SensorsAnalyticsSDK' => 'SensorsAnalyticsSDK/Resources/**/*'}
   end
 
   s.subspec 'Common' do |common|
     common.ios.deployment_target = '9.0'    
     common.osx.deployment_target = '10.13'
-    common.dependency 'SensorsAnalyticsSDK/Base'
+    common.dependency 'SensorsAnalyticsSDK-Patched/Base'
     common.frameworks = 'WebKit'
     common.public_header_files = 'SensorsAnalyticsSDK/JSBridge/SensorsAnalyticsSDK+JavaScriptBridge.h'
     common.source_files = 'SensorsAnalyticsSDK/Core/SAAlertController.{h,m}', 'SensorsAnalyticsSDK/JSBridge/**/*.{h,m}', 'SensorsAnalyticsSDK/Core/HookDelegate/**/*.{h,m}'
@@ -50,16 +51,16 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Core' do |core|
-    core.ios.dependency 'SensorsAnalyticsSDK/Visualized'
-    core.osx.dependency 'SensorsAnalyticsSDK/Common'
-    core.tvos.dependency 'SensorsAnalyticsSDK/Base'
-    core.watchos.dependency 'SensorsAnalyticsSDK/Base'
+    core.ios.dependency 'SensorsAnalyticsSDK-Patched/Visualized'
+    core.osx.dependency 'SensorsAnalyticsSDK-Patched/Common'
+    core.tvos.dependency 'SensorsAnalyticsSDK-Patched/Base'
+    core.watchos.dependency 'SensorsAnalyticsSDK-Patched/Base'
   end
 
   # 全埋点
   s.subspec 'AutoTrack' do |auto|
     auto.platform = :ios, '9.0'
-    auto.dependency 'SensorsAnalyticsSDK/Common'
+    auto.dependency 'SensorsAnalyticsSDK-Patched/Common'
     auto.source_files = "SensorsAnalyticsSDK/AutoTrack/**/*.{h,m}"
     auto.public_header_files = 'SensorsAnalyticsSDK/AutoTrack/SensorsAnalyticsSDK+SAAutoTrack.h', 'SensorsAnalyticsSDK/AutoTrack/SAConfigOptions+AutoTrack.h'
     auto.frameworks = 'UIKit'
@@ -68,7 +69,7 @@ Pod::Spec.new do |s|
   # 可视化相关功能，包含可视化全埋点和点击分析
   s.subspec 'Visualized' do |visualized|
     visualized.platform = :ios, '9.0'
-    visualized.dependency 'SensorsAnalyticsSDK/AutoTrack'
+    visualized.dependency 'SensorsAnalyticsSDK-Patched/AutoTrack'
     visualized.source_files = "SensorsAnalyticsSDK/Visualized/**/*.{h,m}"
     visualized.public_header_files = 'SensorsAnalyticsSDK/Visualized/SensorsAnalyticsSDK+Visualized.h', 'SensorsAnalyticsSDK/Visualized/SAConfigOptions+Visualized.h'
   end
@@ -77,7 +78,7 @@ Pod::Spec.new do |s|
   s.subspec 'Location' do |location|
     location.platform = :ios, '9.0'
     location.frameworks = 'CoreLocation'
-    location.dependency 'SensorsAnalyticsSDK/Core'
+    location.dependency 'SensorsAnalyticsSDK-Patched/Core'
     location.source_files = "SensorsAnalyticsSDK/Location/**/*.{h,m}"
     location.public_header_files = 'SensorsAnalyticsSDK/Location/SensorsAnalyticsSDK+Location.h'
   end
@@ -85,7 +86,7 @@ Pod::Spec.new do |s|
   # 开启设备方向采集
   s.subspec 'DeviceOrientation' do |d|
     d.platform = :ios, '9.0'
-    d.dependency 'SensorsAnalyticsSDK/Core'
+    d.dependency 'SensorsAnalyticsSDK-Patched/Core'
     d.source_files = 'SensorsAnalyticsSDK/DeviceOrientation/**/*.{h,m}'
     d.public_header_files = 'SensorsAnalyticsSDK/DeviceOrientation/SensorsAnalyticsSDK+DeviceOrientation.h'
     d.frameworks = 'CoreMotion'
@@ -94,7 +95,7 @@ Pod::Spec.new do |s|
   # 支持推送点击
   s.subspec 'AppPush' do |push|
     push.platform = :ios, '9.0'
-    push.dependency 'SensorsAnalyticsSDK/Core'
+    push.dependency 'SensorsAnalyticsSDK-Patched/Core'
     push.source_files = "SensorsAnalyticsSDK/AppPush/**/*.{h,m}"
     push.public_header_files = 'SensorsAnalyticsSDK/AppPush/SAConfigOptions+AppPush.h'
   end
@@ -102,7 +103,7 @@ Pod::Spec.new do |s|
   # 支持崩溃事件采集
   s.subspec 'Exception' do |exception|
     exception.platform = :ios, '9.0'
-    exception.dependency 'SensorsAnalyticsSDK/Common'
+    exception.dependency 'SensorsAnalyticsSDK-Patched/Common'
     exception.source_files  =  "SensorsAnalyticsSDK/Exception/**/*.{h,m}"
     exception.public_header_files = 'SensorsAnalyticsSDK/Exception/SAConfigOptions+Exception.h'
   end
@@ -110,7 +111,7 @@ Pod::Spec.new do |s|
   # 基于 UA，使用 UIWebView 或者 WKWebView 进行 App 与 H5 打通
   s.subspec 'WebView' do |web|
     web.platform = :ios, '9.0'
-    web.dependency 'SensorsAnalyticsSDK/Core'
+    web.dependency 'SensorsAnalyticsSDK-Patched/Core'
     web.source_files  =  "SensorsAnalyticsSDK/WebView/**/*.{h,m}"
     web.public_header_files = 'SensorsAnalyticsSDK/WebView/SensorsAnalyticsSDK+WebView.h'
   end
@@ -118,14 +119,14 @@ Pod::Spec.new do |s|
   # 基于 UA，使用 WKWebView 进行 App 与 H5 打通
   s.subspec 'WKWebView' do |web|
     web.platform = :ios, '9.0'
-    web.dependency 'SensorsAnalyticsSDK/Core'
+    web.dependency 'SensorsAnalyticsSDK-Patched/Core'
     web.source_files  =  "SensorsAnalyticsSDK/WKWebView/**/*.{h,m}"
     web.public_header_files = 'SensorsAnalyticsSDK/WKWebView/SensorsAnalyticsSDK+WKWebView.h'
   end
 
   s.subspec 'ApplicationExtension' do |application|
     application.platform = :ios, '9.0'
-    application.dependency 'SensorsAnalyticsSDK/Base'
+    application.dependency 'SensorsAnalyticsSDK-Patched/Base'
   	application.source_files = 'SensorsAnalyticsSDK/AppExtension/*.{h,m}'
   	application.public_header_files = 'SensorsAnalyticsSDK/AppExtension/SensorsAnalyticsSDK+SAAppExtension.h'
   end
@@ -133,7 +134,7 @@ Pod::Spec.new do |s|
   # 使用老版 Cell 点击全埋点采集方案，可能导致某些场景，事件漏采集。使用前建议咨询神策售后技术顾问，否则请慎重使用！
   s.subspec 'DeprecatedCellClick' do |deprecated|
     deprecated.platform = :ios, '9.0'
-    deprecated.dependency 'SensorsAnalyticsSDK/Core'
+    deprecated.dependency 'SensorsAnalyticsSDK-Patched/Core'
     deprecated.source_files = 'CellClick_HookDelegate_Deprecated/*.{h,m}'
     deprecated.project_header_files = 'CellClick_HookDelegate_Deprecated/*.h'
   end
@@ -141,14 +142,14 @@ Pod::Spec.new do |s|
   # 支持曝光
   s.subspec 'Exposure' do |exposure|
     exposure.platform = :ios, '9.0'
-    exposure.dependency 'SensorsAnalyticsSDK/Common'
+    exposure.dependency 'SensorsAnalyticsSDK-Patched/Common'
     exposure.source_files = 'SensorsAnalyticsSDK/Exposure/**/*.{h,m}'
     exposure.public_header_files = 'SensorsAnalyticsSDK/Exposure/SAConfigOptions+Exposure.h', 'SensorsAnalyticsSDK/Exposure/SAExposureConfig.h', 'SensorsAnalyticsSDK/Exposure/SAExposureData.h', 'SensorsAnalyticsSDK/Exposure/SensorsAnalyticsSDK+Exposure.h', 'SensorsAnalyticsSDK/Exposure/UIView+ExposureIdentifier.h', 'SensorsAnalyticsSDK/Exposure/SAExposureListener.h'
   end
 
   # SDK 切换到英文版，运营商属性、日志和弹框提示等，都换成英文。使用前咨询神策售后技术顾问，否则请慎重使用！
   s.subspec 'EnglishResources' do |english|
-    english.dependency 'SensorsAnalyticsSDK/Base'
+    english.dependency 'SensorsAnalyticsSDK-Patched/Base'
     english.source_files = 'SpecialFileSources/SACoreResources+English.{h,m}'
     english.project_header_files = 'SpecialFileSources/SACoreResources+English.h'
   end
