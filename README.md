@@ -16,7 +16,7 @@
 ## 集成方式
 
 ```ruby
-pod 'SensorsAnalyticsSDK-Patched', :git => 'https://github.com/linkjd/sa-sdk-ios-patched.git', :tag => 'v4.9.1'
+pod 'SensorsAnalyticsSDK-Patched', :git => 'https://git-plat.huodada.com/mobile1/sensorsdata-ios.git', :tag => 'v4.9.1'
 ```
 
 ## 代码导入

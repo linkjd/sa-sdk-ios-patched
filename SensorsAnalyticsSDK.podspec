@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = "4.9.1"
   s.summary      = "The official iOS SDK of Sensors Analytics (Patched)."
   s.homepage     = "http://www.sensorsdata.cn"
-  s.source       = { :git => 'https://github.com/linkjd/sa-sdk-ios-patched.git', :tag => "v#{s.version}" }
+  s.source       = { :git => 'https://git-plat.huodada.com/mobile1/sensorsdata-ios.git', :tag => "v#{s.version}" }
   s.module_name  = "SensorsAnalyticsSDK"
   s.license = {
     :type => 'Commercial',
